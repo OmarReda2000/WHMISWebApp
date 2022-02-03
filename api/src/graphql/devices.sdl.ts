@@ -1,7 +1,16 @@
 export const schema = gql`
   type Device {
     id: Int!
+    createdAt: DateTime!
     name: String
+    location: String
+    occupancy: Int
+    connectedAt: DateTime!
+    lastUpdateAt: DateTime
+
+    # Not for the user
+    lastStatusUpdate: DateTime
+    lastCheckedAt: DateTime
   }
 
   type Query {
@@ -21,5 +30,6 @@ export const schema = gql`
     createDevice(input: CreateDeviceInput!): Device! @requireAuth
     updateDevice(id: Int!, input: UpdateDeviceInput!): Device! @requireAuth
     deleteDevice(id: Int!): Device! @requireAuth
+    # deviceChecked(id: Int!): Device! @requireAuth
   }
 `

@@ -3,7 +3,7 @@ import DevicesCell from 'src/components/DevicesCell'
 const HomePage = () => {
   return (
     <>
-      <div className="py-5 px-5 bg-green-600">
+      <div className="py-3 px-5 bg-green-600">
         <p className="text-xl text-white font-semibold">Devices</p>
       </div>
       <div className="bg-gray-200 p-2">
