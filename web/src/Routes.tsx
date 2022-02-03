@@ -9,6 +9,7 @@
 
 import { Set, Router, Route } from '@redwoodjs/router'
 import DevicesLayout from 'src/layouts/DevicesLayout'
+import MainLayout from 'src/layouts/MainLayout/MainLayout'
 
 const Routes = () => {
   return (
@@ -19,8 +20,11 @@ const Routes = () => {
         <Route path="/devices/{id:Int}" page={DeviceDevicePage} name="device" />
         <Route path="/devices" page={DeviceDevicesPage} name="devices" />
       </Set>
-      <Route path="/" page={HomePage} name="home" />
-      <Route path="/device-details/{id:Int}" page={DeviceDetailsPage} name="deviceDetails" />
+      <Set wrap={MainLayout}>
+        <Route path="/" page={HomePage} name="home" />
+        <Route path="/device-details/{id:Int}" page={DeviceDetailsPage} name="deviceDetails" />
+      </Set>
+
       <Route notfound page={NotFoundPage} />
     </Router>
   )

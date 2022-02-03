@@ -1,20 +1,11 @@
-import { Link, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
+import DeviceDetailsCell from 'src/components/DeviceDetailsCell/DeviceDetailsCell'
 
-const DeviceDetailsPage = () => {
+type DeviceDetailsPageProps = { id: number }
+
+const DeviceDetailsPage = ({ id }: DeviceDetailsPageProps) => {
   return (
     <>
-      <MetaTags title="DeviceDetails" description="DeviceDetails page" />
-
-      <h1>DeviceDetailsPage</h1>
-      <p>
-        Find me in{' '}
-        <code>./web/src/pages/DeviceDetailsPage/DeviceDetailsPage.tsx</code>
-      </p>
-      <p>
-        My default route is named <code>deviceDetails</code>, link to me with `
-        <Link to={routes.deviceDetails()}>DeviceDetails</Link>`
-      </p>
+      <DeviceDetailsCell id={id} />
     </>
   )
 }
