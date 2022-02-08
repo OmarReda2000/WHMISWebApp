@@ -21,7 +21,7 @@ export const Failure = ({ error }: CellFailureProps) => (
 
 export const Success = ({ devices }: CellSuccessProps<DevicesQuery>) => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5  gap-4 mx-2 my-3">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-4 mx-2 my-3">
       {devices.map((device) => (
         <DeviceBlock key={device.id} device={device} />
       ))}

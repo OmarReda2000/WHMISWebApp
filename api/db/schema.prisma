@@ -9,6 +9,18 @@ generator client {
 }
 
 model Device {
-  id   Int     @id @default(autoincrement())
-  name String?
+  //Automatic
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+
+  //RasberryPi
+  name             String?
+  location         String?
+  occupancy        Int?
+  connectedAt      DateTime  @default(now())
+  lastUpdateAt     DateTime?
+  lastStatusUpdate DateTime?
+
+  //React App
+  lastCheckedAt DateTime?
 }
