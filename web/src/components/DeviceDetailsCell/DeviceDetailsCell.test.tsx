@@ -1,6 +1,6 @@
-import { render, screen } from '@redwoodjs/testing/web'
+import { render } from '@redwoodjs/testing/web'
 import { Loading, Empty, Failure, Success } from './DeviceDetailsCell'
-import { standard } from './DeviceDetailsCell.mock'
+// import { standard } from './DeviceDetailsCell.mock'
 
 describe('DeviceDetailsCell', () => {
   it('renders Loading successfully', () => {
@@ -29,7 +29,9 @@ describe('DeviceDetailsCell', () => {
 
   it('renders Success successfully', async () => {
     expect(() => {
-      render(<Success deviceDetails={standard().deviceDetails} />)
+      render(
+        <Success /*deviceDetails={standard().deviceDetails}*/ device={null} />
+      )
     }).not.toThrow()
   })
 })

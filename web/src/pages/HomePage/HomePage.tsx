@@ -1,5 +1,6 @@
 // import { Link, routes } from '@redwoodjs/router'
 import DevicesCell from 'src/components/DevicesCell'
+
 const HomePage = () => {
   return (
     <>

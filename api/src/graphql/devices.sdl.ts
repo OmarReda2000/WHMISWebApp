@@ -24,6 +24,7 @@ export const schema = gql`
 
   input UpdateDeviceInput {
     name: String
+    location: String
   }
 
   type Mutation {

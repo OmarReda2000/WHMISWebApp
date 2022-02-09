@@ -12,15 +12,18 @@ const CREATE_DEVICE_MUTATION = gql`
 `
 
 const NewDevice = () => {
-  const [createDevice, { loading, error }] = useMutation(CREATE_DEVICE_MUTATION, {
-    onCompleted: () => {
-      toast.success('Device created')
-      navigate(routes.devices())
-    },
-    onError: (error) => {
-      toast.error(error.message)
-    },
-  })
+  const [createDevice, { loading, error }] = useMutation(
+    CREATE_DEVICE_MUTATION,
+    {
+      onCompleted: () => {
+        toast.success('Device created')
+        navigate(routes.devices())
+      },
+      onError: (error) => {
+        toast.error(error.message)
+      },
+    }
+  )
 
   const onSave = (input) => {
     createDevice({ variables: { input } })

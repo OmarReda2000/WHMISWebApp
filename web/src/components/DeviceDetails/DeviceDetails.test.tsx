@@ -5,7 +5,7 @@ import DeviceDetails from './DeviceDetails'
 describe('DeviceDetails', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<DeviceDetails />)
+      render(<DeviceDetails device={null} />)
     }).not.toThrow()
   })
 })
