@@ -1,4 +1,4 @@
-import DeviceDetailsCell from 'src/components/DeviceDetailsCell/DeviceDetailsCell'
+import DeviceDetailsCell from 'src/components/DeviceDetailsCell'
 
 type DeviceDetailsPageProps = { id: number }
 

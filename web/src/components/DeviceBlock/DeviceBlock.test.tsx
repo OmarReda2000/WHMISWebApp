@@ -5,7 +5,7 @@ import DeviceBlock from './DeviceBlock'
 describe('DeviceBlock', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<DeviceBlock />)
+      render(<DeviceBlock device={null} />)
     }).not.toThrow()
   })
 })

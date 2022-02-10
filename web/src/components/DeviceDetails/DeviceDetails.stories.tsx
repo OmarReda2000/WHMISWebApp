@@ -1,7 +1,7 @@
 import DeviceDetails from './DeviceDetails'
 
 export const generated = () => {
-  return <DeviceDetails />
+  return <DeviceDetails device={null} />
 }
 
 export default { title: 'Components/DeviceDetails' }

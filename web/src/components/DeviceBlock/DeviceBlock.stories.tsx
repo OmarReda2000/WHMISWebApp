@@ -1,7 +1,7 @@
 import DeviceBlock from './DeviceBlock'
 
 export const generated = () => {
-  return <DeviceBlock />
+  return <DeviceBlock device={null} />
 }
 
 export default { title: 'Components/DeviceBlock' }

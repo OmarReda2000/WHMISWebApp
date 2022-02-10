@@ -31,15 +31,18 @@ export const Failure = ({ error }: CellFailureProps) => (
 )
 
 export const Success = ({ device }: CellSuccessProps<EditDeviceById>) => {
-  const [updateDevice, { loading, error }] = useMutation(UPDATE_DEVICE_MUTATION, {
-    onCompleted: () => {
-      toast.success('Device updated')
-      navigate(routes.devices())
-    },
-    onError: (error) => {
-      toast.error(error.message)
-    },
-  })
+  const [updateDevice, { loading, error }] = useMutation(
+    UPDATE_DEVICE_MUTATION,
+    {
+      onCompleted: () => {
+        toast.success('Device updated')
+        navigate(routes.devices())
+      },
+      onError: (error) => {
+        toast.error(error.message)
+      },
+    }
+  )
 
   const onSave = (input, id) => {
     updateDevice({ variables: { id, input } })
@@ -48,10 +51,17 @@ export const Success = ({ device }: CellSuccessProps<EditDeviceById>) => {
   return (
     <div className="rw-segment">
       <header className="rw-segment-header">
-        <h2 className="rw-heading rw-heading-secondary">Edit Device {device.id}</h2>
+        <h2 className="rw-heading rw-heading-secondary">
+          Edit Device {device.id}
+        </h2>
       </header>
       <div className="rw-segment-main">
-        <DeviceForm device={device} onSave={onSave} error={error} loading={loading} />
+        <DeviceForm
+          device={device}
+          onSave={onSave}
+          error={error}
+          loading={loading}
+        />
       </div>
     </div>
   )

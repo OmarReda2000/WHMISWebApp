@@ -1,8 +1,8 @@
 import {
   devices,
   device,
-  createDevice,
-  updateDevice,
+  // createDevice,
+  // updateDevice,
   deleteDevice,
 } from './devices'
 import type { StandardScenario } from './devices.scenarios'

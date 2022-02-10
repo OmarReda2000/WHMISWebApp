@@ -10,27 +10,27 @@ const DELETE_DEVICE_MUTATION = gql`
   }
 `
 
-const jsonDisplay = (obj) => {
-  return (
-    <pre>
-      <code>{JSON.stringify(obj, null, 2)}</code>
-    </pre>
-  )
-}
+// const jsonDisplay = (obj) => {
+//   return (
+//     <pre>
+//       <code>{JSON.stringify(obj, null, 2)}</code>
+//     </pre>
+//   )
+// }
 
-const timeTag = (datetime) => {
-  return (
-    datetime && (
-      <time dateTime={datetime} title={datetime}>
-        {new Date(datetime).toUTCString()}
-      </time>
-    )
-  )
-}
+// const timeTag = (datetime) => {
+//   return (
+//     datetime && (
+//       <time dateTime={datetime} title={datetime}>
+//         {new Date(datetime).toUTCString()}
+//       </time>
+//     )
+//   )
+// }
 
-const checkboxInputTag = (checked) => {
-  return <input type="checkbox" checked={checked} disabled />
-}
+// const checkboxInputTag = (checked) => {
+//   return <input type="checkbox" checked={checked} disabled />
+// }
 
 const Device = ({ device }) => {
   const [deleteDevice] = useMutation(DELETE_DEVICE_MUTATION, {
@@ -53,14 +53,17 @@ const Device = ({ device }) => {
     <>
       <div className="rw-segment">
         <header className="rw-segment-header">
-          <h2 className="rw-heading rw-heading-secondary">Device {device.id} Detail</h2>
+          <h2 className="rw-heading rw-heading-secondary">
+            Device {device.id} Detail
+          </h2>
         </header>
         <table className="rw-table">
           <tbody>
             <tr>
               <th>Id</th>
               <td>{device.id}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Name</th>
               <td>{device.name}</td>
             </tr>
