@@ -22,7 +22,7 @@ const Routes = () => {
       </Set>
       <Set wrap={MainLayout}>
         <Route path="/" page={HomePage} name="home" />
-        <Route path="/device-details/{id:Int}" page={DeviceDetailsPage} name="deviceDetails" />
+        <Route path="/device-details/{id:String}" page={DeviceDetailsPage} name="deviceDetails" />
       </Set>
 
       <Route notfound page={NotFoundPage} />

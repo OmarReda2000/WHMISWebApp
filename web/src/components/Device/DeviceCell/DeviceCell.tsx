@@ -4,7 +4,7 @@ import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 import Device from 'src/components/Device/Device'
 
 export const QUERY = gql`
-  query FindDeviceById($id: Int!) {
+  query FindDeviceById($id: String!) {
     device: device(id: $id) {
       id
       name

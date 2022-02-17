@@ -5,7 +5,7 @@ import { toast } from '@redwoodjs/web/dist/toast'
 import { Form, Submit, TextField } from '@redwoodjs/forms'
 
 // const UPDATE_LAST_CHECKED_MUTATION = gql`
-//   mutation UpdateLastCheckedMutation($id: Int!) {
+//   mutation UpdateLastCheckedMutation($id: String!) {
 //     deviceChecked(id: $id) {
 //       id
 //     }
@@ -13,7 +13,7 @@ import { Form, Submit, TextField } from '@redwoodjs/forms'
 // `
 
 const FORGET_DEVICE_MUTATION = gql`
-  mutation ForgetDeviceMutation($id: Int!) {
+  mutation ForgetDeviceMutation($id: String!) {
     deleteDevice(id: $id) {
       id
     }
@@ -21,7 +21,7 @@ const FORGET_DEVICE_MUTATION = gql`
 `
 
 const UPDATE_NAME_MUTATION = gql`
-  mutation UpdateNameMutation($id: Int!, $input: UpdateDeviceInput!) {
+  mutation UpdateNameMutation($id: String!, $input: UpdateDeviceInput!) {
     updateDevice(id: $id, input: $input) {
       id
       name

@@ -8,7 +8,7 @@ import { navigate, routes } from '@redwoodjs/router'
 import DeviceForm from 'src/components/Device/DeviceForm'
 
 export const QUERY = gql`
-  query EditDeviceById($id: Int!) {
+  query EditDeviceById($id: String!) {
     device: device(id: $id) {
       id
       name
@@ -16,7 +16,7 @@ export const QUERY = gql`
   }
 `
 const UPDATE_DEVICE_MUTATION = gql`
-  mutation UpdateDeviceMutation($id: Int!, $input: UpdateDeviceInput!) {
+  mutation UpdateDeviceMutation($id: String!, $input: UpdateDeviceInput!) {
     updateDevice(id: $id, input: $input) {
       id
       name

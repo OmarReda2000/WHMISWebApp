@@ -1,6 +1,6 @@
 export const schema = gql`
   type Device {
-    id: Int!
+    id: String!
     createdAt: DateTime!
     name: String
     location: String
@@ -15,7 +15,7 @@ export const schema = gql`
 
   type Query {
     devices: [Device!]! @requireAuth
-    device(id: Int!): Device @requireAuth
+    device(id: String!): Device @requireAuth
   }
 
   input CreateDeviceInput {
@@ -29,8 +29,8 @@ export const schema = gql`
 
   type Mutation {
     createDevice(input: CreateDeviceInput!): Device! @requireAuth
-    updateDevice(id: Int!, input: UpdateDeviceInput!): Device! @requireAuth
-    deleteDevice(id: Int!): Device! @requireAuth
-    # deviceChecked(id: Int!): Device! @requireAuth
+    updateDevice(id: String!, input: UpdateDeviceInput!): Device! @requireAuth
+    deleteDevice(id: String!): Device! @requireAuth
+    # deviceChecked(id: String!): Device! @requireAuth
   }
 `

@@ -27,15 +27,18 @@
 from multiprocessing.connection import Connection
 import sqlite3
 from datetime import datetime
+import string
+import os.path
 
-
-def onStartUp(conn: Connection, id: int):
+def onStartUp(conn: Connection, id: string):
     c = conn.cursor()
-    c.execute("SELECT ID FROM Device WHERE ID='{}'".format(id))
+    print('\n\n\n',c)
+    c.execute("SELECT * FROM Device;".format(id))
     conn.commit()
-
+    r = c.fetchall()
+    print('\n\n\n',r)
     # Device already exists
-    if len(c.fetchall()):
+    if len(r):
         print('Device Exists in the DB, updated the connectedAt field!')
         c.execute(
             "UPDATE Device SET connectedAt = '{}' WHERE ID='{}';".format(datetime.now(), id))
@@ -44,15 +47,11 @@ def onStartUp(conn: Connection, id: int):
     # Device DNE
     else:
         print("Devices doesn't already exist, Add device to the DB...")
-        c.execute("INSERT INTO Device (name) VALUES ('New Device') RETURNING ID")
-        # Currently nothing happens with the ID, but in later stages of the production
-        # the id should be stored on the RaspberryPi
-        id = c.fetchall()[0][0]
-        print("ID assigned for the new created device: ", id)
+        c.execute("INSERT INTO Device (id,name) VALUES ('ABCD','New Device');")
         conn.commit()
 
 
-def onOccupancyUpdate(conn: Connection, id: int, occupancy: int):
+def onOccupancyUpdate(conn: Connection, id: String, occupancy: int):
     c = conn.cursor()
     print('New occupancy update detected! Updating the occupancy field in the DB...')
     c.execute(
@@ -61,10 +60,13 @@ def onOccupancyUpdate(conn: Connection, id: int, occupancy: int):
 
 
 def main():
-    conn = sqlite3.connect('dev.db')
+    conn = sqlite3.connect('/Users/logan/Documents/GitHub/WHMISWebApp/api/db/dev.db')
+    c=conn.cursor()
+    c.execute("SELECT name from sqlite_master where type='table';")
+    print('/n/n/n/n',c.fetchall())
     # retrieve the id from the pi
-    onStartUp(conn, 8)
-    onOccupancyUpdate(conn, 8, 4)
+    onStartUp(conn, '8')
+    # onOccupancyUpdate(conn, 8, 4)
     print("Ending program...")
     conn.close()
 
