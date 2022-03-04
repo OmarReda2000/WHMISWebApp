@@ -3,14 +3,14 @@ import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 import DeviceDetails from 'src/components/DeviceDetails'
 
 export const QUERY = gql`
-  query DeviceDetailsQuery($id: Int!) {
+  query DeviceDetailsQuery($id: String!) {
     device: device(id: $id) {
       id
       name
-      createdAt
       location
       occupancy
       connectedAt
+      createdAt
     }
   }
 `

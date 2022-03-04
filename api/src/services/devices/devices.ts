@@ -3,12 +3,24 @@ import type { Prisma } from '@prisma/client'
 import { db } from 'src/lib/db'
 
 export const devices = () => {
-  return db.device.findMany()
+  return db.device.findMany({
+    select:{
+      id:true,
+      name:true,
+      occupancy:true,
+    }
+  })
 }
 
 export const device = ({ id }: Prisma.DeviceWhereUniqueInput) => {
   return db.device.findUnique({
     where: { id },
+    // select:{
+    //   id:true,
+    //   name:true,
+    //   createdAt:true,
+    //   connectedAt: true,
+    // }
   })
 }
 

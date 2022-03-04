@@ -1,6 +1,6 @@
 import DeviceDetailsCell from 'src/components/DeviceDetailsCell'
 
-type DeviceDetailsPageProps = { id: number }
+type DeviceDetailsPageProps = { id: string }
 
 const DeviceDetailsPage = ({ id }: DeviceDetailsPageProps) => {
   return (

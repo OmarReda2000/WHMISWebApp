@@ -10,16 +10,21 @@ generator client {
 
 model Device {
   //Automatic
-  id        Int      @id @default(autoincrement())
+  id        String   @id
   createdAt DateTime @default(now())
 
   //RasberryPi
   name             String?
   location         String?
   occupancy        Int?
+  occupancyLimit   Int?
   connectedAt      DateTime  @default(now())
   lastUpdateAt     DateTime?
   lastStatusUpdate DateTime?
+  doorOpen         Boolean?
+  motionDetected   Boolean?
+  securityBreach   Boolean?  @default(false)
+
 
   //React App
   lastCheckedAt DateTime?
