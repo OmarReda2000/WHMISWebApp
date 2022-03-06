@@ -21,7 +21,8 @@ const ImageOverlay = ({ image, onClick = null }: ImageOverlayProps) => {
           onClick={(e) => e.stopPropagation()}
         />
         <div className="text-white font-semibold bg-black p-2">
-          {`Timestamp: ${date.toLocaleString()}`}
+          <div>{`Timestamp: ${date.toLocaleString()}`}</div>
+          <div>{`Location: ${image.device.location}`}</div>
         </div>
       </div>
     </Overlay>

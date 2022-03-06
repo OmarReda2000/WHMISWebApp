@@ -11,8 +11,8 @@ export const QUERY = gql`
       data
       time
       device {
-        id
         name
+        location
       }
     }
   }

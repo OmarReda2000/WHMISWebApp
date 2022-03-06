@@ -12,6 +12,7 @@ export const QUERY = gql`
       time
       device {
         name
+        location
       }
     }
   }
