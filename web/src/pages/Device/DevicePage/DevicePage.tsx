@@ -1,7 +1,7 @@
 import DeviceCell from 'src/components/Device/DeviceCell'
 
 type DevicePageProps = {
-  id: number
+  id: string
 }
 
 const DevicePage = ({ id }: DevicePageProps) => {

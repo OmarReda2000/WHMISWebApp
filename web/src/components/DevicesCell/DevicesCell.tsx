@@ -13,13 +13,15 @@ export const QUERY = gql`
 
 export const Loading = () => (
   <div className="w-full h-full flex justify-center p-2">
-    <span className="font-semibold text-gray-500 text-2xl">Loading...</span>
+    <span className="font-semibold text-gray-500 lg:text-2xl md:text-xl text-lg text-center">
+      Loading...
+    </span>
   </div>
 )
 
 export const Empty = () => (
   <div className="w-full h-full flex justify-center p-2">
-    <span className="font-semibold text-gray-500 text-2xl">
+    <span className="font-semibold text-gray-500 lg:text-2xl md:text-xl text-lg text-center">
       No devices detected
     </span>
   </div>

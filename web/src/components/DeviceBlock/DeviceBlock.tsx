@@ -1,11 +1,13 @@
 import { routes, navigate } from '@redwoodjs/router'
 import tempIcon from 'src/assets/tempIcon.png'
+
 type DeviceBlockProps = {
   device: {
     id: number
     name?: string
   }
 }
+
 const DeviceBlock = ({ device }: DeviceBlockProps) => {
   return (
     <button
