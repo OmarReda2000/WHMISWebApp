@@ -1,7 +1,7 @@
 import EditDeviceCell from 'src/components/Device/EditDeviceCell'
 
 type DevicePageProps = {
-  id: number
+  id: string
 }
 
 const EditDevicePage = ({ id }: DevicePageProps) => {

@@ -25,7 +25,15 @@ model Device {
   motionDetected   Boolean?
   securityBreach   Boolean?  @default(false)
 
-
   //React App
   lastCheckedAt DateTime?
+  image         Image[]
+}
+
+model Image {
+  id       Int      @id @default(autoincrement())
+  data     String // Should be in base 64
+  time     DateTime @default(now())
+  device   Device?  @relation(fields: [deviceId], references: [id])
+  deviceId String?
 }

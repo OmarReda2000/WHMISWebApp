@@ -4,11 +4,11 @@ import { db } from 'src/lib/db'
 
 export const devices = () => {
   return db.device.findMany({
-    select:{
-      id:true,
-      name:true,
-      occupancy:true,
-    }
+    select: {
+      id: true,
+      name: true,
+      occupancy: true,
+    },
   })
 }
 
