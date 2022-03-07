@@ -7,6 +7,7 @@ from digi.xbee.reader import DeviceDiscovered, XBeeEvent
 from multiprocessing.connection import Connection
 from datetime import datetime
 from PIL import Image
+import digi.xbee.models.address
 import sqlite3, io, time, sys, binascii
 
 def onStartUp(id: str):
@@ -60,21 +61,29 @@ def onMotionStatus(conn: Connection, id: str, motion: bool):
     # conn.commit()
 
 
-def concatImage(newData, image):
-    imgDest = '/Users/logan/Desktop'
-    size = 0
-
-    if image == bytearray():
-        size = newData
-        print("Total size: ", size)
+def storeImage(newData, id, image):
+    size = 858
 
     image.extend(newData)
-    print("Size: ",sys.getsizeof(image))
+    # if image == bytearray(0):
+    #     size = newData
+    #     #print("Total size: ", size)
+    # else:
+    #     image.extend(newData)
+    #     print("Size: ",sys.getsizeof(image))
+    print(len(image))
+    if len(image) == size:
+        imgString = str(binascii.hexlify(image))[2:-1]
+        print(imgString)
+        # imgString = ''
+        database = '/Users/logan/Documents/GitHub/WHMISWebApp/api/db/dev.db'
+        conn = sqlite3.connect(database)
+        c = conn.cursor()
+        print("INSERT INTO Image (deviceId,data) VALUES ('{}','{}');".format(id, str(imgString)))
+        c.execute("INSERT INTO Image (deviceId,data) VALUES ('{}','{}');".format(id, str(imgString)))
+        # c.execute("INSERT INTO Device (id,name,createdAt,connectedAt) VALUES ('{}','New Device',datetime('now'),datetime('now'));".format(id))
 
-    if sys.getsizeof(image) == size:
-        imageSave = Image.open(io.BytesIO(image))
-        imageSave.save(imgDest)
-        print("The image fricken saved!!!")
+        print("The image saved!!!")
         del image
 
 
@@ -83,7 +92,6 @@ def concatImage(newData, image):
 def main():
 
     image = bytearray(0)
-
     # define MAC address for reach node: host MAC is 0013A20041C2F683
     thermalNode = '0013A2004198CD77'
     visionNode = ''
@@ -96,42 +104,46 @@ def main():
 
     # Initialize Xbee device and define serial port
     coordinator = XBeeDevice('/dev/tty.usbserial-AG0JYNQ0', 9600)
+    armed = False
+    def io_samples_callback(sample, remote, time):
+        # print("New sample received from %s - %s - %s" % (remote.get_64bit_addr(), sample, time))
+        id = remote.get_64bit_addr()
+        database = '/Users/logan/Documents/GitHub/WHMISWebApp/api/db/dev.db'
+        conn = sqlite3.connect(database)
+        c = conn.cursor()
+        c.execute("SELECT doorOpen FROM Device WHERE ID='{}'".format(id))
+        result = c.fetchone()
+        if (sample.get_digital_value(IOLine.DIO3_AD3) == IOValue.HIGH) and (result[0] != False):
+            print("Door is closed")
+            doorOpen = False
+            onDoorStatus(conn, id, doorOpen)
 
-    # def io_samples_callback(sample, remote, time):
-    #     # print("New sample received from %s - %s - %s" % (remote.get_64bit_addr(), sample, time))
-    #     id = remote.get_64bit_addr()
-    #     c = conn.cursor()
-    #     c.execute("SELECT doorOpen FROM Device WHERE ID='{}'".format(id))
-    #     result = c.fetchone()
-    #     if (sample.get_digital_value(IOLine.DIO3_AD3) == IOValue.HIGH) and (result[0] != False):
-    #         print("Door is closed")
-    #         print(result)
-    #         doorOpen = False
-    #         onDoorStatus(conn, id, doorOpen)
-    #
-    #     if (sample.get_digital_value(IOLine.DIO3_AD3) == IOValue.LOW) and (result[0] != True):
-    #         print("Door is open")
-    #         doorOpen = True
-    #         onDoorStatus(conn, id, doorOpen)
-    #
-    #     # if sample.get_digital_value(IOLine.DIO12) == IOValue.HIGH:
-    #     #     motion = True
-    #     #     print("Motion detected")
-    #     #     onMotionStatus(conn, id, motion)
+        if (sample.get_digital_value(IOLine.DIO3_AD3) == IOValue.LOW) and (result[0] != True):
+            print("Door is open")
+            doorOpen = True
+            onDoorStatus(conn, id, doorOpen)
+            coordinator.send_data_broadcast('1')
+
+        if sample.get_digital_value(IOLine.DIO12) == IOValue.HIGH:
+            motion = True
+            print("Motion detected")
+            onMotionStatus(conn, id, motion)
+            coordinator.send_data_broadcast('1')
 
     def data_received_callback(message):
         #print("Occupancy Update: ", message.data.decode())
         # MAC address as ID
         id = str(message.remote_device)[:16]
-        #data = message.data.decode()
+        # data = message.data.decode()
+        # print(message.data.decode())
         # if data.startswith("O:"):      # data is occupancy count
         #     print("Occupancy Update: ", message.data.decode(), id)
-        onOccupancyUpdate(id, 2)
+        #     onOccupancyUpdate(id, 2)
 
         # else:     # data is portion of image.
-        # image = Image.frombytes("I;16", size, data, decoder_name="raw")
-        #concatImage(message.data, image)
-
+        #     print("Image detected")
+        #     storeImage(message.data, message.remote_device, image)
+        storeImage(message.data, message.remote_device, image)
     #alternatively use this in transparent mode
    # def packet_received_callback(message):
 
@@ -146,14 +158,13 @@ def main():
 
         # Get the network.
         xnet = coordinator.get_network()
-        xnet.set_discovery_timeout(6)  # 15 seconds.
+        xnet.set_discovery_timeout(6)  # 6 seconds.
 
         # This callback triggers whenever digital IO samples are received
         # coordinator.add_io_sample_received_callback(io_samples_callback)
 
         # This callback triggers whenever a data API frame is received (ie. images or occupancy)
         coordinator.add_data_received_callback(data_received_callback)
-        # coordinator.add_packet_received_callback(packet_received_callback)
 
         # This callback triggers when discovery process is enabled and detects all connected nodes
         xnet.add_device_discovered_callback(device_discovered_callback)

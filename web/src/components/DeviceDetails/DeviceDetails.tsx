@@ -3,14 +3,15 @@ import tempIcon from 'src/assets/tempIcon.png'
 import { routes, navigate } from '@redwoodjs/router'
 import { toast } from '@redwoodjs/web/dist/toast'
 import { Form, Submit, TextField } from '@redwoodjs/forms'
+import { useEffect } from 'react'
 
-// const UPDATE_LAST_CHECKED_MUTATION = gql`
-//   mutation UpdateLastCheckedMutation($id: String!) {
-//     deviceChecked(id: $id) {
-//       id
-//     }
-//   }
-// `
+const UPDATE_LAST_CHECKED_MUTATION = gql`
+  mutation UpdateLastCheckedMutation($id: String!) {
+    deviceChecked(id: $id) {
+      id
+    }
+  }
+`
 
 const FORGET_DEVICE_MUTATION = gql`
   mutation ForgetDeviceMutation($id: String!) {
@@ -31,8 +32,10 @@ const UPDATE_NAME_MUTATION = gql`
 `
 
 const DeviceDetails = ({ device }) => {
-  // const [deviceChecked] = useMutation(UPDATE_LAST_CHECKED_MUTATION)
-  // deviceChecked({ variables: { id: device.id } })
+  const [deviceChecked] = useMutation(UPDATE_LAST_CHECKED_MUTATION)
+  useEffect(() => {
+    deviceChecked({ variables: { id: device.id } })
+  })
 
   const [forgetDevice] = useMutation(FORGET_DEVICE_MUTATION, {
     onCompleted: () => {
