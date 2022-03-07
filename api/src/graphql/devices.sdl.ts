@@ -31,6 +31,6 @@ export const schema = gql`
     createDevice(input: CreateDeviceInput!): Device! @requireAuth
     updateDevice(id: String!, input: UpdateDeviceInput!): Device! @requireAuth
     deleteDevice(id: String!): Device! @requireAuth
-    # deviceChecked(id: String!): Device! @requireAuth
+    deviceChecked(id: String!): Device! @requireAuth
   }
 `

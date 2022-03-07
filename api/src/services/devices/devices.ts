@@ -34,14 +34,14 @@ export const createDevice = ({ input }: CreateDeviceArgs) => {
   })
 }
 
-// export const deviceChecked = ({ id }: { id: number }) => {
-//   return db.device.update({
-//     data: {
-//       lastCheckedAt: new Date(),
-//     },
-//     where: { id },
-//   })
-// }
+export const deviceChecked = ({ id }: { id: string }) => {
+  return db.device.update({
+    data: {
+      lastCheckedAt: new Date(),
+    },
+    where: { id },
+  })
+}
 
 interface UpdateDeviceArgs extends Prisma.DeviceWhereUniqueInput {
   input: Prisma.DeviceUpdateInput
