@@ -4,6 +4,12 @@ import ImageBlock from 'src/components/ImageBlock/ImageBlock'
 import { useState } from 'react'
 import ImageOverlay from 'src/components/ImageOverlay/ImageOverlay'
 
+export const beforeQuery = () => {
+  return {
+    pollInterval: 1000 * 10,
+  }
+}
+
 export const QUERY = gql`
   query FindImages {
     images {

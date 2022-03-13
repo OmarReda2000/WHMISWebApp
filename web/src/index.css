@@ -8,6 +8,29 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
+
+.notification{
+  border-radius: 100%;
+  background-color: rgb(165,0,0);
+  animation-name: flash;
+  animation-duration: 2s;
+  animation-timing-function: ease-in-out;
+  animation-duration: alternate;
+  animation-iteration-count: infinite;
+  animation-play-state: running;
+}
+
+@keyframes flash{
+  0%{
+    background-color: rgb(120, 0, 0);
+  }
+  50%{
+    background-color: red;
+  }
+  100%{
+    background-color: rgb(120,0,0);
+  }
+}
 /**
  * END --- SETUP TAILWINDCSS EDIT
  */

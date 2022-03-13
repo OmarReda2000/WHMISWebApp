@@ -4,6 +4,13 @@ import ImageBlock from '../ImageBlock/ImageBlock'
 import { useState } from 'react'
 import ImageOverlay from '../ImageOverlay/ImageOverlay'
 
+export const beforeQuery = (props) => {
+  return {
+    pollInterval: 1000 * 10,
+    variables: { deviceId: props.deviceId },
+  }
+}
+
 export const QUERY = gql`
   query DeviceImagesQuery($deviceId: String!) {
     imagesByDevice(deviceId: $deviceId) {
@@ -18,13 +25,23 @@ export const QUERY = gql`
   }
 `
 
-export const Loading = () => <div>Loading...</div>
-
-export const Empty = () => <div>Empty</div>
-
-export const Failure = ({ error }: CellFailureProps) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+export const Loading = () => (
+  <div className="w-full h-full flex justify-center p-2">
+    <span className="font-semibold text-gray-500 lg:text-2xl md:text-xl text-lg text-center">
+      Loading...
+    </span>
+  </div>
 )
+
+export const Empty = () => {
+  return (
+    <div className="w-full h-full flex justify-center p-2">
+      <span className="font-semibold text-gray-500 lg:text-2xl md:text-xl text-lg text-center">
+        No images available
+      </span>
+    </div>
+  )
+}
 
 export const Success = ({
   imagesByDevice,

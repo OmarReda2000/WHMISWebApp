@@ -25,6 +25,7 @@ const HomePage = () => {
 
           <DevicesCell />
         </div>
+        <div className="w-full border-t border-gray-300"></div>
         <div className="px-3">
           <p className="text-lg font-semibold">Images</p>
           <ImagesCell />

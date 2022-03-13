@@ -1,26 +1,14 @@
-import type { Prisma } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 
 import { db } from 'src/lib/db'
 
 export const devices = () => {
-  return db.device.findMany({
-    select: {
-      id: true,
-      name: true,
-      occupancy: true,
-    },
-  })
+  return db.device.findMany()
 }
 
 export const device = ({ id }: Prisma.DeviceWhereUniqueInput) => {
   return db.device.findUnique({
     where: { id },
-    // select:{
-    //   id:true,
-    //   name:true,
-    //   createdAt:true,
-    //   connectedAt: true,
-    // }
   })
 }
 
@@ -52,6 +40,11 @@ export const updateDevice = ({ id, input }: UpdateDeviceArgs) => {
     data: input,
     where: { id },
   })
+}
+
+export const updateArmDevices = async ({ arm }: { arm: boolean }) => {
+  await db.device.updateMany({ data: { armed: arm } })
+  return db.device.findMany()
 }
 
 export const deleteDevice = ({ id }: Prisma.DeviceWhereUniqueInput) => {

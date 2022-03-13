@@ -2,6 +2,13 @@ import type { DeviceDetailsQuery } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 import DeviceDetails from 'src/components/DeviceDetails'
 
+export const beforeQuery = (props) => {
+  return {
+    pollInterval: 1000 * 10,
+    variables: { id: props.id },
+  }
+}
+
 export const QUERY = gql`
   query DeviceDetailsQuery($id: String!) {
     device: device(id: $id) {
@@ -9,6 +16,11 @@ export const QUERY = gql`
       name
       location
       occupancy
+      occupancyLimit
+      doorOpen
+      motionDetected
+      armed
+      lastUpdateAt
       connectedAt
       createdAt
     }
