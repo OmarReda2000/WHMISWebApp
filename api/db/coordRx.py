@@ -94,6 +94,7 @@ def storeImage(newData, id):
 
 
 
+
 global size, image
 size = 0
 image = bytearray(0)
@@ -132,6 +133,15 @@ def main():
             motion = False
             print("No motion detected")
             onMotionStatus(id, motion)
+            onDoorStatus(conn, id, doorOpen)
+            coordinator.send_data_broadcast('1')
+
+        if sample.get_digital_value(IOLine.DIO12) == IOValue.HIGH:
+            motion = True
+            print("Motion detected")
+            onMotionStatus(conn, id, motion)
+            coordinator.send_data_broadcast('1')
+
 
     def data_received_callback(message):
         # MAC address as ID
@@ -158,6 +168,7 @@ def main():
         # Get the network.
         xnet = coordinator.get_network()
         xnet.set_discovery_timeout(10)  # 10 seconds.
+
 
         # This callback triggers whenever digital IO samples are received
         coordinator.add_io_sample_received_callback(io_samples_callback)

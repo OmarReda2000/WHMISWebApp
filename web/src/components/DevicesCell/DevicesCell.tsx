@@ -31,7 +31,10 @@ export const Failure = ({ error }: CellFailureProps) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 
-export const Success = ({ devices }: CellSuccessProps<DevicesQuery>) => {
+export const Success = ({ devices, refetch }) => {
+  // setInterval(() => {
+  //   refetch()
+  // }, 15000)
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-4 mx-2 my-3">
       {devices.map((device) => (
