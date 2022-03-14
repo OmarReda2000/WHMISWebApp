@@ -4,7 +4,7 @@ import type { ResolverArgs } from '@redwoodjs/graphql-server'
 import { db } from 'src/lib/db'
 
 export const images = () => {
-  return db.image.findMany()
+  return db.image.findMany({ orderBy: { time: 'desc' } })
 }
 
 export const image = ({ id }: Prisma.ImageWhereUniqueInput) => {
@@ -46,6 +46,18 @@ export const deleteImage = ({ id }: Prisma.ImageWhereUniqueInput) => {
   return db.image.delete({
     where: { id },
   })
+}
+
+export const deleteAllImages = async () => {
+  await db.image.deleteMany()
+  return db.image.findMany()
+}
+
+export const deleteAllImagesByDevice = async ({
+  deviceId,
+}: ImagesByDeviceParams) => {
+  await db.image.deleteMany({ where: { deviceId } })
+  return db.image.findMany({ where: { deviceId } })
 }
 
 export const Image = {

@@ -5,8 +5,12 @@ export const schema = gql`
     name: String
     location: String
     occupancy: Int
+    occupancyLimit: Int
     connectedAt: DateTime!
     lastUpdateAt: DateTime
+    doorOpen: Boolean
+    motionDetected: Boolean
+    armed: Boolean
 
     # Not for the user
     lastStatusUpdate: DateTime
@@ -25,11 +29,14 @@ export const schema = gql`
   input UpdateDeviceInput {
     name: String
     location: String
+    occupancyLimit: Int
+    armed: Boolean
   }
 
   type Mutation {
     createDevice(input: CreateDeviceInput!): Device! @requireAuth
     updateDevice(id: String!, input: UpdateDeviceInput!): Device! @requireAuth
+    updateArmDevices(arm: Boolean!): [Device!]! @requireAuth
     deleteDevice(id: String!): Device! @requireAuth
     deviceChecked(id: String!): Device! @requireAuth
   }

@@ -23,7 +23,7 @@ model Device {
   lastStatusUpdate DateTime?
   doorOpen         Boolean?
   motionDetected   Boolean?
-  securityBreach   Boolean?  @default(false)
+  armed            Boolean?  @default(false)
 
   //React App
   lastCheckedAt DateTime?
