@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 type OverlayProps = {
   children: JSX.Element
   onClick?: (item: unknown) => void

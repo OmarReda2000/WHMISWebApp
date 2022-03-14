@@ -1,10 +1,7 @@
-// import { Link, routes } from '@redwoodjs/router'
 import DevicesCell from 'src/components/DevicesCell'
 import ImagesCell from 'src/components/Image/ImagesCell'
-import { useState } from 'react'
 
 const HomePage = () => {
-  const [refresh, setRefresh] = useState(false)
   return (
     <>
       <div className="py-3 px-5 bg-green-600">
@@ -15,14 +12,7 @@ const HomePage = () => {
         <div className="px-3">
           <div className="flex gap-2">
             <p className="text-lg font-semibold">Devices</p>
-            {/* <button
-              className="border rounded-lg border-green-700 px-1 text-left text-xs focus-outline:none hover:bg-green-600 hover:text-white"
-              onClick={() => setRefresh(true)}
-            >
-              Refresh
-            </button> */}
           </div>
-
           <DevicesCell />
         </div>
         <div className="w-full border-t border-gray-300"></div>

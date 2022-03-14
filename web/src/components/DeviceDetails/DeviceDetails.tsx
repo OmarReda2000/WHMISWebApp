@@ -87,6 +87,15 @@ const DeviceDetails = ({ device }) => {
           <FieldName text="Occupancy" />
           <FieldData text={device.occupancy} />
 
+          <FieldName text="Surpassed occupancy" />
+          <BooleanFieldData
+            bool={
+              device.occupancyLimit &&
+              device.occupancy &&
+              device.occupancy > device.occupancyLimit
+            }
+          />
+
           <FieldName text="Door open" />
           <BooleanFieldData bool={device.doorOpen} />
 
@@ -95,7 +104,14 @@ const DeviceDetails = ({ device }) => {
 
           <FieldName text="Security breach" />
           <BreachBooleanFieldData
-            bool={device.armed && (device.doorOpen || device.motionDetected)}
+            bool={
+              device.armed &&
+              (device.doorOpen ||
+                device.motionDetected ||
+                (device.occupancyLimit &&
+                  device.occupancy &&
+                  device.occupancy > device.occupancyLimit))
+            }
           />
 
           <FieldName text="ID" />
@@ -172,8 +188,8 @@ const FieldData = ({ text }: { text: string }) => {
 const BooleanFieldData = ({ bool }: { bool: boolean }) => {
   return (
     <div
-      className={`col-span-2 w-0.5 p-2 rounded-xl border-2 border-gray-400 ${
-        bool ? 'bg-green-700 border-green-700' : ''
+      className={`col-span-2 w-0.5 p-2 rounded-xl border-2 ${
+        bool ? 'bg-green-700 border-green-700' : 'border-gray-400'
       }`}
     />
   )
@@ -182,8 +198,8 @@ const BooleanFieldData = ({ bool }: { bool: boolean }) => {
 const BreachBooleanFieldData = ({ bool }: { bool: boolean }) => {
   return (
     <div
-      className={`col-span-2 w-0.5 p-2 rounded-xl border-2 border-gray-400 ${
-        bool ? 'bg-red-700 border-red-700' : ''
+      className={`col-span-2 w-0.5 p-2 rounded-xl border-2 ${
+        bool ? 'bg-red-700 border-red-700' : 'border-gray-400'
       }`}
     />
   )

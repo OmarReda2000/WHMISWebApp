@@ -27,5 +27,7 @@ export const schema = gql`
     createImage(input: CreateImageInput!): Image! @requireAuth
     updateImage(id: Int!, input: UpdateImageInput!): Image! @requireAuth
     deleteImage(id: Int!): Image! @requireAuth
+    deleteAllImages: [Image!]! @requireAuth
+    deleteAllImagesByDevice(deviceId: String!): [Image!]! @requireAuth
   }
 `

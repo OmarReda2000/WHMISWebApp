@@ -1,33 +1,25 @@
-import { base64String, DELETE_IMAGE_MUTATION } from '../ImageBlock/ImageBlock'
+import { base64String } from '../ImageBlock/ImageBlock'
 import Overlay from '../Overlay/Overlay'
 import { Image } from 'types/graphql'
-import { toast } from '@redwoodjs/web/dist/toast'
-import { useMutation } from '@redwoodjs/web'
-import { QUERY } from 'src/components/Image/ImagesCell/ImagesCell'
 
 type ImageOverlayProps = {
   image: Image
   onClick?: (item: unknown) => void
+  onDelete?: ({ variables: { id } }) => void
 }
 
-const ImageOverlay = ({ image, onClick = null }: ImageOverlayProps) => {
+const ImageOverlay = ({
+  image,
+  onClick = null,
+  onDelete = null,
+}: ImageOverlayProps) => {
   const date = new Date(image.time)
 
-  const [deleteImage] = useMutation(DELETE_IMAGE_MUTATION, {
-    onCompleted: () => {
-      toast.success(`${image.id} removed`)
-    },
-    onError: (error) => {
-      toast.error(error.message)
-    },
-    refetchQueries: [{ query: QUERY }],
-    awaitRefetchQueries: true,
-  })
-
-  const onDeleteIamge = (e) => {
+  const handleDelete = (e) => {
     e.preventDefault() // Need to put this in or else it shows two toasts
+    e.stopPropagation()
     if (confirm(`Are you sure you want to delete image ${image.id}?`)) {
-      deleteImage({ variables: { id: image.id } })
+      onDelete && onDelete({ variables: { id: image.id } })
     }
   }
 
@@ -37,7 +29,7 @@ const ImageOverlay = ({ image, onClick = null }: ImageOverlayProps) => {
         <div className="relative lg:w-2/3 md:w-4/5 w-5/6 bg-opacity-100">
           <button
             className="absolute bottom-0 right-0 w-max h-max p-2 rounded-lg bg-red-700 font-semibold text-white m-4 opacity-50 hover:opacity-100"
-            onClick={onDeleteIamge}
+            onClick={handleDelete}
           >
             Delete
           </button>

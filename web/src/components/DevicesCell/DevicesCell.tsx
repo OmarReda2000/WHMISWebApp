@@ -15,6 +15,7 @@ export const QUERY = gql`
       name
       lastCheckedAt
       lastUpdateAt
+      armed
     }
   }
 `
@@ -50,39 +51,51 @@ export const Failure = ({ error }: CellFailureProps) => (
 export const Success = ({ devices }: CellSuccessProps) => {
   const [updateArmDevices] = useMutation(ARM_ALL_DEVICES_MUTATION, {
     onCompleted: () => {
-      toast.success('Armed all devices')
+      toast.success(`Armed all devices`)
     },
     onError: (error) => {
       toast.error(error.message)
     },
+    refetchQueries: [{ query: QUERY }],
+  })
+
+  const [updateDisarmDevices] = useMutation(ARM_ALL_DEVICES_MUTATION, {
+    onCompleted: () => {
+      toast.success(`Disarmed all devices`)
+    },
+    onError: (error) => {
+      toast.error(error.message)
+    },
+    refetchQueries: [{ query: QUERY }],
   })
 
   const handleArmDevices = (arm: boolean) => {
-    updateArmDevices({ variables: { arm } })
+    arm
+      ? updateArmDevices({ variables: { arm } })
+      : updateDisarmDevices({ variables: { arm } })
   }
 
   return (
     <>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mx-2 my-3">
-        {devices.map((device) => (
-          <DeviceBlock key={device.id} device={device} />
-        ))}
-      </div>
-      <div className="flex flex-row items-stretch space-x-4 mx-2 sm:flex-row">
+      <div className="flex flex-row items-stretch space-x-4 mx-2 sm:flex-row mt-1">
         <button
-          className="w-max p-2 rounded-lg bg-green-700 hover:bg-green-800 font-semibold text-white mt-5"
+          className="w-max p-2 rounded-lg bg-green-700 hover:bg-green-800 font-semibold text-white"
           onClick={() => handleArmDevices(true)}
         >
           Arm all devices
         </button>
         <button
-          className="w-max p-2 rounded-lg bg-red-700 hover:bg-red-800 font-semibold text-white mt-5"
+          className="w-max p-2 rounded-lg bg-red-700 hover:bg-red-800 font-semibold text-white"
           onClick={() => handleArmDevices(false)}
         >
           Disarm all devices
         </button>
       </div>
-      {/* </div> */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mx-2 my-3">
+        {devices.map((device) => (
+          <DeviceBlock key={device.id} device={device} />
+        ))}
+      </div>
     </>
   )
 }

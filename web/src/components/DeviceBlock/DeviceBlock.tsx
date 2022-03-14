@@ -8,6 +8,7 @@ type DeviceBlockProps = {
     name?: string
     lastCheckedAt?: Date
     lastUpdateAt?: Date
+    armed: boolean
   }
 }
 
@@ -41,7 +42,11 @@ const DeviceBlock = ({ device }: DeviceBlockProps) => {
         <p className="font-semibold">{device.name}</p>
       </button>
       {showNotification ? (
-        <div className="notification absolute top-0 right-0 m-1 z-50 w-3 h-3 " />
+        <div
+          className={`${
+            device.armed ? 'notificationArmed' : 'notificationUnarmed'
+          } absolute top-0 right-0 m-1 z-50 w-3 h-3`}
+        />
       ) : null}
     </div>
   )

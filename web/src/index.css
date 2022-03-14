@@ -9,10 +9,10 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-.notification{
+.notificationArmed{
   border-radius: 100%;
   background-color: rgb(165,0,0);
-  animation-name: flash;
+  animation-name: flashArmed;
   animation-duration: 2s;
   animation-timing-function: ease-in-out;
   animation-duration: alternate;
@@ -20,7 +20,7 @@
   animation-play-state: running;
 }
 
-@keyframes flash{
+@keyframes flashArmed{
   0%{
     background-color: rgb(120, 0, 0);
   }
@@ -29,6 +29,29 @@
   }
   100%{
     background-color: rgb(120,0,0);
+  }
+}
+
+.notificationUnarmed{
+  border-radius: 100%;
+  background-color: rgb(0,0,165);
+  animation-name: flashUnarmed;
+  animation-duration: 2s;
+  animation-timing-function: ease-in-out;
+  animation-duration: alternate;
+  animation-iteration-count: infinite;
+  animation-play-state: running;
+}
+
+@keyframes flashUnarmed{
+  0%{
+    background-color: rgb(0, 50, 120);
+  }
+  50%{
+    background-color: rgb(0, 120, 255);
+  }
+  100%{
+    background-color: rgb(0, 50, 120);
   }
 }
 /**
