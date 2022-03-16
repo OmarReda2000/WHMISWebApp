@@ -1,4 +1,5 @@
 
+
 from xmlrpc.client import DateTime
 from digi.xbee.devices import XBeeDevice, RemoteXBeeDevice
 from digi.xbee.io import IOLine, IOValue, IOMode
@@ -43,36 +44,41 @@ def onOccupancyUpdate(id: str, occupancy: int):
     conn.close()
 
 
-def onDoorStatus(conn: Connection, id: str, doorOpen: bool):
-    #c = conn.cursor()
+def onDoorStatus(id: str, doorOpen: bool):
+    database = '/Users/logan/Documents/GitHub/WHMISWebApp/api/db/dev.db'
+    conn = sqlite3.connect(database)
+    c = conn.cursor()
     print('Door change detected! Updating the door field in the DB...')
     print()
-    # c.execute(
-    #     "UPDATE Device SET doorOpen = '{}', lastUpdateAt= '{}'  WHERE ID='{}';".format(doorOpen, datetime.now(), id))
-    # conn.commit()
+    c.execute(
+        "UPDATE Device SET doorOpen = '{}', lastUpdateAt= '{}'  WHERE ID='{}';".format(doorOpen, datetime.now(), id))
+    conn.commit()
 
 
-def onMotionStatus(conn: Connection, id: str, motion: bool):
-    # c = conn.cursor()
+def onMotionStatus(id: str, motion: bool):
+    database = '/Users/logan/Documents/GitHub/WHMISWebApp/api/db/dev.db'
+    conn = sqlite3.connect(database)
+    c = conn.cursor()
     print('Motion detected! Updating the motion field in the DB...')
     print()
-    # c.execute(
-    #    "UPDATE Device SET motion = '{}', lastUpdateAt= '{}'  WHERE ID='{}';".format(motion, datetime.now(), id))
-    # conn.commit()
+    c.execute(
+       "UPDATE Device SET motionDetected = '{}', lastUpdateAt= '{}'  WHERE ID='{}';".format(motion, datetime.now(), id))
+    conn.commit()
 
 
-def storeImage(newData, id, image):
-    size = 858
+def storeImage(newData, id):
+    global size, image
+    if size == 0:
+        print("Size data type ", type(size))
+        print("newData data type ", type(newData))
+        size = int(newData.decode())
 
-    image.extend(newData)
-    # if image == bytearray(0):
-    #     size = newData
-    #     #print("Total size: ", size)
-    # else:
-    #     image.extend(newData)
-    #     print("Size: ",sys.getsizeof(image))
-    print(len(image))
-    if len(image) == size:
+        print("Total size: ", size)
+    else:
+        image.extend(newData)
+        print("Size: ",len(image))
+
+    if len(image) == int(size):
         imgString = str(binascii.hexlify(image))[2:-1]
         print(imgString)
         # imgString = ''
@@ -81,46 +87,52 @@ def storeImage(newData, id, image):
         c = conn.cursor()
         print("INSERT INTO Image (deviceId,data) VALUES ('{}','{}');".format(id, str(imgString)))
         c.execute("INSERT INTO Image (deviceId,data) VALUES ('{}','{}');".format(id, str(imgString)))
-        # c.execute("INSERT INTO Device (id,name,createdAt,connectedAt) VALUES ('{}','New Device',datetime('now'),datetime('now'));".format(id))
-
+        conn.commit()
         print("The image saved!!!")
-        del image
+        image = bytearray(0)
+        size = 0
 
 
 
+
+global size, image
+size = 0
+image = bytearray(0)
 
 def main():
-
-    image = bytearray(0)
-    # define MAC address for reach node: host MAC is 0013A20041C2F683
-    thermalNode = '0013A2004198CD77'
-    visionNode = ''
-    pirNode = '0013A20041D16AD5'
-
-    # create a database connection and cursor
-    # conn = sqlite3.connect(database)
-    # c = conn.cursor()
-    # retrieve the id from the pi id should be in string form and use MAC address
-
     # Initialize Xbee device and define serial port
-    coordinator = XBeeDevice('/dev/tty.usbserial-AG0JYNQ0', 9600)
+    coordinator = XBeeDevice('/dev/tty.usbserial-AG0JYNQ0', 4800, flow_control=1)
     armed = False
+
     def io_samples_callback(sample, remote, time):
         # print("New sample received from %s - %s - %s" % (remote.get_64bit_addr(), sample, time))
         id = remote.get_64bit_addr()
         database = '/Users/logan/Documents/GitHub/WHMISWebApp/api/db/dev.db'
         conn = sqlite3.connect(database)
         c = conn.cursor()
-        c.execute("SELECT doorOpen FROM Device WHERE ID='{}'".format(id))
+        c.execute("SELECT doorOpen, motionDetected FROM Device WHERE ID='{}'".format(id))
         result = c.fetchone()
+        print(result)
+        print(sample)
         if (sample.get_digital_value(IOLine.DIO3_AD3) == IOValue.HIGH) and (result[0] != False):
             print("Door is closed")
             doorOpen = False
-            onDoorStatus(conn, id, doorOpen)
+            onDoorStatus(id, doorOpen)
 
         if (sample.get_digital_value(IOLine.DIO3_AD3) == IOValue.LOW) and (result[0] != True):
             print("Door is open")
             doorOpen = True
+            onDoorStatus(id, doorOpen)
+
+        if (sample.get_digital_value(IOLine.DIO12) == IOValue.HIGH) and (result[1] != True):
+            motion = True
+            print("Motion detected")
+            onMotionStatus(id, motion)
+
+        if (sample.get_digital_value(IOLine.DIO12) == IOValue.LOW) and (result[1] != False):
+            motion = False
+            print("No motion detected")
+            onMotionStatus(id, motion)
             onDoorStatus(conn, id, doorOpen)
             coordinator.send_data_broadcast('1')
 
@@ -130,8 +142,8 @@ def main():
             onMotionStatus(conn, id, motion)
             coordinator.send_data_broadcast('1')
 
+
     def data_received_callback(message):
-        #print("Occupancy Update: ", message.data.decode())
         # MAC address as ID
         id = str(message.remote_device)[:16]
         # data = message.data.decode()
@@ -141,15 +153,12 @@ def main():
         #     onOccupancyUpdate(id, 2)
 
         # else:     # data is portion of image.
-        #     print("Image detected")
-        #     storeImage(message.data, message.remote_device, image)
-        storeImage(message.data, message.remote_device, image)
-    #alternatively use this in transparent mode
-   # def packet_received_callback(message):
+        storeImage(message.data, id)
 
     def device_discovered_callback(remote):
         print("Device discovered: %s" % remote)
-        onStartUp(str(remote)[:16])
+        if (str(remote)[:16] != '0013A20041C2F683'):
+          onStartUp(str(remote)[:16])
 
 
     try:
@@ -158,10 +167,11 @@ def main():
 
         # Get the network.
         xnet = coordinator.get_network()
-        xnet.set_discovery_timeout(6)  # 6 seconds.
+        xnet.set_discovery_timeout(10)  # 10 seconds.
+
 
         # This callback triggers whenever digital IO samples are received
-        # coordinator.add_io_sample_received_callback(io_samples_callback)
+        coordinator.add_io_sample_received_callback(io_samples_callback)
 
         # This callback triggers whenever a data API frame is received (ie. images or occupancy)
         coordinator.add_data_received_callback(data_received_callback)
